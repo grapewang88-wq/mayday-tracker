@@ -853,13 +853,17 @@
         els.cityMarkers.innerHTML = cities.map(function (city) {
           var point = CITY_POINTS[city];
           if (!point) return "";
-          // Alternate label position to avoid overlap
-          var idx = cities.indexOf(city);
-          var side = (idx % 2 === 0) ? 1 : -1;
-          var labelX = point[0] + (side > 0 ? 14 : -14);
-          var labelY = point[1] - 6;
-          var anchor = side > 0 ? "start" : "end";
-          return "<g><circle class=\"city-dot\" cx=\"" + point[0] + "\" cy=\"" + point[1] + "\" r=\"6\"></circle><text class=\"city-label\" x=\"" + labelX + "\" y=\"" + labelY + "\" text-anchor=\"" + anchor + "\">" + escapeHtml(city) + "</text></g>";
+          // Smart label positioning to avoid overlaps
+          var offsets = {
+            "深圳": [-12, 10], "香港": [12, -10],
+            "杭州": [-14, -14], "上海": [14, -14],
+            "澳门": [-14, 8],
+          };
+          var off = offsets[city] || [14, -6];
+          var labelX = point[0] + off[0];
+          var labelY = point[1] + off[1];
+          var anchor = off[0] > 0 ? "start" : "end";
+          return "<g><circle class=\"city-dot\" cx=\"" + point[0] + "\" cy=\"" + point[1] + "\" r=\"5\"></circle><text class=\"city-label\" x=\"" + labelX + "\" y=\"" + labelY + "\" text-anchor=\"" + anchor + "\">" + escapeHtml(city) + "</text></g>";
         }).join("");
       }
 
