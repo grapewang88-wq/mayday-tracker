@@ -853,9 +853,13 @@
         els.cityMarkers.innerHTML = cities.map(function (city) {
           var point = CITY_POINTS[city];
           if (!point) return "";
-          var labelX = point[0] + 8;
-          var labelY = point[1] - 8;
-          return "<g><circle class=\"city-dot\" cx=\"" + point[0] + "\" cy=\"" + point[1] + "\" r=\"6\"></circle><text class=\"city-label\" x=\"" + labelX + "\" y=\"" + labelY + "\">" + escapeHtml(city) + "</text></g>";
+          // Alternate label position to avoid overlap
+          var idx = cities.indexOf(city);
+          var side = (idx % 2 === 0) ? 1 : -1;
+          var labelX = point[0] + (side > 0 ? 14 : -14);
+          var labelY = point[1] - 6;
+          var anchor = side > 0 ? "start" : "end";
+          return "<g><circle class=\"city-dot\" cx=\"" + point[0] + "\" cy=\"" + point[1] + "\" r=\"6\"></circle><text class=\"city-label\" x=\"" + labelX + "\" y=\"" + labelY + "\" text-anchor=\"" + anchor + "\">" + escapeHtml(city) + "</text></g>";
         }).join("");
       }
 
