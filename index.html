@@ -1,0 +1,1074 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f1923">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="五月天演唱会小本本">
+  <meta name="format-detection" content="telephone=no">
+  <title>五月天演唱会小本本</title>
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='38' fill='%231a5fdc'/%3E%3Ccircle cx='90' cy='82' r='42' fill='%23ff6b35'/%3E%3Ctext x='90' y='142' text-anchor='middle' font-size='34' font-family='Arial' fill='white'%3EMAY%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --bg: #0f1923;
+      --panel: #1a2a3a;
+      --panel-2: #22364a;
+      --line: rgba(255, 255, 255, .1);
+      --text: #f3f7ff;
+      --muted: #9fb1c7;
+      --blue: #1a5fdc;
+      --blue-2: #4f8cff;
+      --orange: #ff6b35;
+      --green: #45d483;
+      --danger: #ff5f6d;
+      --shadow: 0 12px 30px rgba(0, 0, 0, .28);
+      color-scheme: dark;
+      font-family: "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text); }
+    body {
+      display: flex;
+      justify-content: center;
+      background:
+        radial-gradient(circle at 15% -10%, rgba(26, 95, 220, .28), transparent 32%),
+        linear-gradient(180deg, #102133 0%, var(--bg) 48%, #0a121b 100%);
+    }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+
+    .app {
+      width: 100%;
+      max-width: 500px;
+      min-height: 100vh;
+      position: relative;
+      padding: env(safe-area-inset-top) 14px calc(82px + env(safe-area-inset-bottom));
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 16px 4px 10px;
+    }
+    .brand { min-width: 0; }
+    .brand h1 { margin: 0; font-size: 22px; line-height: 1.2; letter-spacing: 0; }
+    .brand p { margin: 5px 0 0; color: var(--muted); font-size: 13px; }
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(26, 42, 58, .92);
+      color: var(--text);
+      box-shadow: var(--shadow);
+      flex: 0 0 auto;
+      font-size: 19px;
+    }
+
+    .view { display: none; animation: rise .22s ease-out; }
+    .view.active { display: block; }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      background: linear-gradient(180deg, rgba(34, 54, 74, .96), rgba(26, 42, 58, .98));
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 16px;
+      margin: 12px 0;
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 18px 4px 10px;
+    }
+    .section-title h2 { margin: 0; font-size: 18px; }
+    .section-title span { color: var(--muted); font-size: 13px; }
+
+    .countdown {
+      min-height: 220px;
+      display: grid;
+      align-content: center;
+      gap: 14px;
+      background:
+        linear-gradient(135deg, rgba(26, 95, 220, .38), rgba(255, 107, 53, .14)),
+        linear-gradient(180deg, rgba(34, 54, 74, .98), rgba(26, 42, 58, .98));
+    }
+    .next-city { color: #cfe0ff; font-size: 15px; }
+    .count-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .timebox {
+      background: rgba(15, 25, 35, .62);
+      border: 1px solid rgba(255, 255, 255, .08);
+      border-radius: 12px;
+      padding: 12px 6px;
+      text-align: center;
+      min-width: 0;
+    }
+    .timebox strong {
+      display: block;
+      color: #fff;
+      font-size: clamp(24px, 10vw, 42px);
+      line-height: 1;
+      letter-spacing: 0;
+    }
+    .timebox span { color: var(--muted); font-size: 12px; }
+    .empty-next {
+      border: 1px dashed rgba(255, 255, 255, .24);
+      border-radius: 12px;
+      padding: 22px;
+      text-align: center;
+      background: rgba(15, 25, 35, .35);
+    }
+    .empty-next strong { display: block; font-size: 22px; margin-bottom: 8px; }
+    .ticket-alert {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 14px;
+      border-radius: 12px;
+      background: rgba(255, 107, 53, .16);
+      border: 1px solid rgba(255, 107, 53, .34);
+      color: #ffe2d6;
+      margin: 12px 0;
+    }
+    .ticket-alert strong { color: #fff; }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .quick-btn {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(34, 54, 74, .78);
+      color: var(--text);
+      padding: 14px 8px;
+      display: grid;
+      justify-items: center;
+      gap: 7px;
+      min-height: 88px;
+    }
+    .quick-btn b { font-size: 24px; line-height: 1; }
+    .quick-btn span { font-size: 13px; white-space: nowrap; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .stat {
+      padding: 12px;
+      border-radius: 12px;
+      background: rgba(15, 25, 35, .45);
+      border: 1px solid var(--line);
+      text-align: center;
+    }
+    .stat strong { display: block; font-size: 22px; color: #fff; }
+    .stat span { color: var(--muted); font-size: 12px; }
+
+    .map-card { padding: 10px; overflow: hidden; }
+    .china-map {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 10px;
+      background: #132334;
+    }
+    .province { fill: #203852; stroke: rgba(255, 255, 255, .18); stroke-width: 1.4; }
+    .coast { fill: #234463; }
+    .city-dot { fill: var(--blue-2); stroke: #fff; stroke-width: 2.5; filter: drop-shadow(0 0 7px rgba(79, 140, 255, .75)); }
+    .city-label { fill: #f7fbff; font-size: 13px; font-weight: 700; paint-order: stroke; stroke: #0f1923; stroke-width: 3px; }
+
+    .concert-list { display: grid; gap: 10px; }
+    .concert-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px 12px;
+      padding: 13px;
+      border-radius: 12px;
+      border: 1px solid var(--line);
+      background: rgba(26, 42, 58, .72);
+    }
+    .concert-item h3 { margin: 0; font-size: 17px; }
+    .concert-meta {
+      grid-column: 1 / -1;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+    .pill {
+      align-self: start;
+      border-radius: 999px;
+      padding: 5px 9px;
+      background: rgba(26, 95, 220, .18);
+      color: #cfe0ff;
+      font-size: 12px;
+      border: 1px solid rgba(79, 140, 255, .26);
+      white-space: nowrap;
+    }
+
+    .form { display: grid; gap: 12px; }
+    .field { display: grid; gap: 7px; }
+    .field label { color: #d6e4f7; font-size: 13px; }
+    .field input, .field select, .field textarea {
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, .13);
+      border-radius: 12px;
+      background: rgba(15, 25, 35, .74);
+      color: var(--text);
+      padding: 12px;
+      outline: none;
+    }
+    .field textarea { min-height: 96px; resize: vertical; line-height: 1.6; }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: rgba(79, 140, 255, .78);
+      box-shadow: 0 0 0 3px rgba(26, 95, 220, .18);
+    }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn {
+      border: 0;
+      border-radius: 12px;
+      min-height: 44px;
+      padding: 11px 14px;
+      background: var(--blue);
+      color: #fff;
+      font-weight: 700;
+      box-shadow: 0 10px 22px rgba(26, 95, 220, .26);
+    }
+    .btn.secondary {
+      background: rgba(255, 255, 255, .08);
+      color: var(--text);
+      border: 1px solid var(--line);
+      box-shadow: none;
+    }
+    .btn.orange { background: var(--orange); box-shadow: 0 10px 22px rgba(255, 107, 53, .22); }
+    .btn.danger { background: rgba(255, 95, 109, .16); color: #ffd5da; border: 1px solid rgba(255, 95, 109, .35); box-shadow: none; }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .actions .btn { flex: 1 1 110px; }
+
+    .share-wrap { display: grid; gap: 12px; }
+    canvas {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      background: #122234;
+      box-shadow: var(--shadow);
+    }
+    .fallback {
+      min-height: 90px;
+      font-size: 13px;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      place-items: end center;
+      z-index: 20;
+      background: rgba(3, 7, 12, .62);
+      padding: 14px;
+    }
+    .modal.active { display: grid; }
+    .sheet {
+      width: 100%;
+      max-width: 500px;
+      max-height: min(86vh, 720px);
+      overflow: auto;
+      border-radius: 16px 16px 12px 12px;
+      background: #152334;
+      border: 1px solid var(--line);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .48);
+      padding: 16px;
+    }
+    .sheet-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .sheet-head h2 { margin: 0; font-size: 18px; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(82px + env(safe-area-inset-bottom));
+      transform: translate(-50%, 16px);
+      opacity: 0;
+      pointer-events: none;
+      background: rgba(4, 10, 18, .92);
+      border: 1px solid var(--line);
+      color: #fff;
+      border-radius: 999px;
+      padding: 10px 14px;
+      z-index: 30;
+      transition: .2s ease;
+      max-width: calc(100vw - 32px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    .bottom-nav {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 500px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      padding: 8px 10px calc(8px + env(safe-area-inset-bottom));
+      background: rgba(13, 24, 36, .94);
+      border-top: 1px solid var(--line);
+      backdrop-filter: blur(14px);
+      z-index: 10;
+    }
+    .nav-btn {
+      border: 0;
+      border-radius: 12px;
+      background: transparent;
+      color: var(--muted);
+      padding: 8px 4px;
+      display: grid;
+      justify-items: center;
+      gap: 3px;
+      min-width: 0;
+    }
+    .nav-btn b { font-size: 19px; line-height: 1; }
+    .nav-btn span { font-size: 12px; }
+    .nav-btn.active { color: #fff; background: rgba(26, 95, 220, .2); }
+
+    .muted { color: var(--muted); }
+    .hidden { display: none !important; }
+
+    @media (max-width: 360px) {
+      .app { padding-left: 10px; padding-right: 10px; }
+      .row { grid-template-columns: 1fr; }
+      .quick-grid { gap: 8px; }
+      .quick-btn span { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <h1>五月天演唱会小本本</h1>
+        <p id="subtitle">记录每一次蓝色相遇</p>
+      </div>
+      <button class="icon-btn" id="settingsBtn" type="button" aria-label="设置">⚙️</button>
+    </header>
+
+    <section class="view active" id="homeView" data-title="记录每一次蓝色相遇">
+      <article class="card countdown" id="countdownCard"></article>
+      <div id="ticketAlert"></div>
+      <div class="card">
+        <div class="stats">
+          <div class="stat"><strong id="statShows">0</strong><span>总场次</span></div>
+          <div class="stat"><strong id="statCities">0</strong><span>去过城市</span></div>
+          <div class="stat"><strong id="statSongs">0</strong><span>歌单记录</span></div>
+        </div>
+      </div>
+      <div class="section-title">
+        <h2>快捷入口</h2>
+        <span>下一站，继续唱</span>
+      </div>
+      <div class="quick-grid">
+        <button class="quick-btn" type="button" data-go="map"><b>🗺️</b><span>足迹地图</span></button>
+        <button class="quick-btn" type="button" data-go="checkin"><b>🎫</b><span>打卡记录</span></button>
+        <button class="quick-btn" type="button" data-go="share"><b>💙</b><span>分享卡片</span></button>
+      </div>
+    </section>
+
+    <section class="view" id="mapView" data-title="蓝色足迹地图">
+      <div class="section-title">
+        <h2>足迹地图</h2>
+        <span id="mapSummary">0城0场</span>
+      </div>
+      <article class="card map-card">
+        <svg class="china-map" viewBox="0 0 360 280" role="img" aria-label="中国地图简化版">
+          <rect x="0" y="0" width="360" height="280" rx="10" fill="#122234"></rect>
+          <path class="province" d="M65 78 L104 45 L151 50 L172 77 L153 108 L105 113 L72 101 Z"></path>
+          <path class="province" d="M153 108 L180 80 L228 82 L246 113 L225 143 L175 141 Z"></path>
+          <path class="province coast" d="M226 142 L268 125 L306 143 L314 178 L286 210 L238 204 L218 170 Z"></path>
+          <path class="province" d="M91 117 L152 110 L177 142 L159 177 L104 178 L72 151 Z"></path>
+          <path class="province coast" d="M161 178 L220 171 L239 205 L217 239 L162 235 L135 205 Z"></path>
+          <path class="province" d="M47 156 L101 179 L135 207 L118 241 L62 229 L33 196 Z"></path>
+          <path class="province coast" d="M245 206 L288 212 L303 239 L276 260 L237 250 Z"></path>
+          <path class="province" d="M230 56 L276 69 L304 105 L274 126 L245 113 L227 83 Z"></path>
+          <g id="cityMarkers"></g>
+        </svg>
+      </article>
+      <div class="section-title">
+        <h2>场次详情</h2>
+        <span>城市 / 场馆 / 日期 / 座位</span>
+      </div>
+      <div class="concert-list" id="concertList"></div>
+    </section>
+
+    <section class="view" id="checkinView" data-title="打卡记录">
+      <div class="section-title">
+        <h2 id="formTitle">新增打卡</h2>
+        <span>保存后自动更新足迹</span>
+      </div>
+      <article class="card">
+        <form class="form" id="checkinForm">
+          <input type="hidden" id="recordId">
+          <div class="row">
+            <div class="field">
+              <label for="cityInput">城市</label>
+              <select id="cityInput" required></select>
+            </div>
+            <div class="field">
+              <label for="dateInput">日期</label>
+              <input id="dateInput" type="date">
+            </div>
+          </div>
+          <div class="field">
+            <label for="venueInput">场馆</label>
+            <input id="venueInput" type="text" maxlength="40" placeholder="例如：鸟巢 / 体育中心">
+          </div>
+          <div class="field">
+            <label for="seatInput">座位区</label>
+            <input id="seatInput" type="text" maxlength="30" placeholder="例如：内场A3 / 看台218">
+          </div>
+          <div class="field">
+            <label for="songsInput">本场歌单</label>
+            <textarea id="songsInput" maxlength="600" placeholder="写下这一场唱过、最想记住的歌"></textarea>
+          </div>
+          <div class="actions">
+            <button class="btn" type="submit">💾 保存打卡</button>
+            <button class="btn secondary" type="button" id="resetFormBtn">↩️ 清空</button>
+          </div>
+        </form>
+      </article>
+      <div class="section-title">
+        <h2>我的记录</h2>
+        <span id="recordCount">0条</span>
+      </div>
+      <div class="concert-list" id="editList"></div>
+    </section>
+
+    <section class="view" id="shareView" data-title="五迷认证卡片">
+      <div class="section-title">
+        <h2>分享卡片</h2>
+        <span>Canvas 生成</span>
+      </div>
+      <article class="card share-wrap">
+        <canvas id="shareCanvas" width="900" height="1200" aria-label="分享卡片预览"></canvas>
+        <div class="actions">
+          <button class="btn orange" id="saveImageBtn" type="button">📥 保存图片</button>
+          <button class="btn secondary" id="rerollLyricBtn" type="button">🎲 换一句</button>
+        </div>
+        <div class="field">
+          <label for="shareFallback">微信兼容文本</label>
+          <textarea id="shareFallback" class="fallback" readonly></textarea>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <nav class="bottom-nav" aria-label="底部导航">
+    <button class="nav-btn active" type="button" data-view="home"><b>🏠</b><span>首页</span></button>
+    <button class="nav-btn" type="button" data-view="map"><b>🗺️</b><span>足迹</span></button>
+    <button class="nav-btn" type="button" data-view="checkin"><b>🎫</b><span>打卡</span></button>
+    <button class="nav-btn" type="button" data-view="share"><b>💙</b><span>分享</span></button>
+  </nav>
+
+  <aside class="modal" id="settingsModal" aria-hidden="true">
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="sheet-head">
+        <h2 id="settingsTitle">设置</h2>
+        <button class="icon-btn" id="closeSettingsBtn" type="button" aria-label="关闭">✕</button>
+      </div>
+      <form class="form" id="settingsForm">
+        <div class="row">
+          <div class="field">
+            <label for="nextCityInput">下一场城市</label>
+            <select id="nextCityInput"></select>
+          </div>
+          <div class="field">
+            <label for="nextDateInput">下一场日期</label>
+            <input id="nextDateInput" type="datetime-local">
+          </div>
+        </div>
+        <div class="field">
+          <label for="ticketDateInput">抢票日期</label>
+          <input id="ticketDateInput" type="datetime-local">
+        </div>
+        <div class="actions">
+          <button class="btn" type="submit">✅ 保存设置</button>
+          <button class="btn danger" id="clearSettingsBtn" type="button">🧹 清除设置</button>
+        </div>
+      </form>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var STORAGE_KEY = "mayday_concert_records_v1";
+      var SETTINGS_KEY = "mayday_concert_settings_v1";
+      var CITIES = ["北京", "青岛", "上海", "太原", "杭州", "香港", "深圳", "广州", "南京", "成都", "重庆", "武汉", "西安", "台北", "澳门"];
+      var CITY_POINTS = {
+        "北京": [246, 92], "青岛": [270, 123], "上海": [286, 171], "太原": [228, 118],
+        "杭州": [279, 184], "香港": [263, 240], "深圳": [256, 235], "广州": [245, 231],
+        "南京": [273, 163], "成都": [150, 186], "重庆": [174, 197], "武汉": [225, 178],
+        "西安": [194, 149], "台北": [310, 224], "澳门": [250, 241]
+      };
+      var LYRICS = [
+        "我和我最后的倔强，握紧双手绝对不放。",
+        "突然好想你，你会在哪里。",
+        "不打扰，是我的温柔。",
+        "恋爱ing happy ing，心情就像是坐上一台喷射机。",
+        "怎么去拥有一道彩虹，怎么去拥抱一夏天的风。"
+      ];
+
+      var state = {
+        records: [],
+        settings: {},
+        activeView: "home",
+        lyricIndex: Math.floor(Math.random() * LYRICS.length),
+        countdownTimer: null
+      };
+
+      var els = {};
+
+      document.addEventListener("DOMContentLoaded", init);
+
+      function init() {
+        cacheEls();
+        installPwaBits();
+        loadData();
+        fillCityOptions();
+        bindEvents();
+        renderAll();
+        startCountdown();
+      }
+
+      function cacheEls() {
+        [
+          "subtitle", "countdownCard", "ticketAlert", "statShows", "statCities", "statSongs",
+          "mapSummary", "cityMarkers", "concertList", "checkinForm", "recordId", "cityInput",
+          "dateInput", "venueInput", "seatInput", "songsInput", "formTitle", "resetFormBtn",
+          "recordCount", "editList", "shareCanvas", "saveImageBtn", "rerollLyricBtn",
+          "shareFallback", "settingsBtn", "settingsModal", "closeSettingsBtn", "settingsForm",
+          "nextCityInput", "nextDateInput", "ticketDateInput", "clearSettingsBtn", "toast"
+        ].forEach(function (id) { els[id] = document.getElementById(id); });
+      }
+
+      function installPwaBits() {
+        var manifest = {
+          name: "五月天演唱会小本本",
+          short_name: "五月天小本本",
+          description: "记录五月天演唱会足迹、打卡和五迷认证卡片",
+          start_url: ".",
+          scope: ".",
+          display: "standalone",
+          background_color: "#0f1923",
+          theme_color: "#1a5fdc",
+          icons: [
+            { src: makeIconData(192), sizes: "192x192", type: "image/svg+xml", purpose: "any maskable" },
+            { src: makeIconData(512), sizes: "512x512", type: "image/svg+xml", purpose: "any maskable" }
+          ]
+        };
+        var link = document.createElement("link");
+        link.rel = "manifest";
+        link.href = "data:application/manifest+json;charset=utf-8," + encodeURIComponent(JSON.stringify(manifest));
+        document.head.appendChild(link);
+
+        if ("serviceWorker" in navigator && location.protocol !== "file:") {
+          var swCode = [
+            "const CACHE='mayday-pwa-cache-v1';",
+            "self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(['./'])));self.skipWaiting();});",
+            "self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim();});",
+            "self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{const copy=res.clone();caches.open(CACHE).then(c=>c.put(e.request,copy));return res;}).catch(()=>caches.match('./'))));});"
+          ].join("");
+          var swUrl = URL.createObjectURL(new Blob([swCode], { type: "text/javascript" }));
+          navigator.serviceWorker.register(swUrl).catch(function () {});
+        }
+      }
+
+      function makeIconData(size) {
+        var svg = "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 " + size + " " + size + "'><rect width='" + size + "' height='" + size + "' rx='" + Math.round(size * .2) + "' fill='#1a5fdc'/><circle cx='" + size / 2 + "' cy='" + size * .45 + "' r='" + size * .23 + "' fill='#ff6b35'/><text x='" + size / 2 + "' y='" + size * .76 + "' text-anchor='middle' font-size='" + size * .16 + "' font-family='Arial' font-weight='700' fill='white'>MAY</text></svg>";
+        return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+      }
+
+      function loadData() {
+        try {
+          state.records = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+          state.settings = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
+        } catch (err) {
+          state.records = [];
+          state.settings = {};
+        }
+        if (!Array.isArray(state.records) || state.records.length === 0) {
+          state.records = ["北京", "青岛", "上海", "太原", "杭州", "香港", "深圳"].map(function (city, index) {
+            return { id: makeId(), city: city, venue: "", date: "", seat: "", songs: "", createdAt: Date.now() + index };
+          });
+          saveRecords();
+        }
+      }
+
+      function saveRecords() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state.records));
+      }
+
+      function saveSettings() {
+        localStorage.setItem(SETTINGS_KEY, JSON.stringify(state.settings));
+      }
+
+      function fillCityOptions() {
+        [els.cityInput, els.nextCityInput].forEach(function (select) {
+          select.innerHTML = CITIES.map(function (city) {
+            return "<option value=\"" + escapeHtml(city) + "\">" + escapeHtml(city) + "</option>";
+          }).join("");
+        });
+      }
+
+      function bindEvents() {
+        document.querySelectorAll(".nav-btn").forEach(function (btn) {
+          btn.addEventListener("click", function () { switchView(btn.dataset.view); });
+        });
+        document.querySelectorAll("[data-go]").forEach(function (btn) {
+          btn.addEventListener("click", function () { switchView(btn.dataset.go); });
+        });
+        els.settingsBtn.addEventListener("click", openSettings);
+        els.closeSettingsBtn.addEventListener("click", closeSettings);
+        els.settingsModal.addEventListener("click", function (event) {
+          if (event.target === els.settingsModal) closeSettings();
+        });
+        els.settingsForm.addEventListener("submit", submitSettings);
+        els.clearSettingsBtn.addEventListener("click", function () {
+          state.settings = {};
+          saveSettings();
+          closeSettings();
+          renderAll();
+          toast("已清除下一场和抢票设置");
+        });
+        els.checkinForm.addEventListener("submit", submitRecord);
+        els.resetFormBtn.addEventListener("click", resetForm);
+        els.saveImageBtn.addEventListener("click", saveShareImage);
+        els.rerollLyricBtn.addEventListener("click", function () {
+          state.lyricIndex = (state.lyricIndex + 1 + Math.floor(Math.random() * (LYRICS.length - 1))) % LYRICS.length;
+          renderShare();
+        });
+      }
+
+      function switchView(view) {
+        state.activeView = view;
+        document.querySelectorAll(".view").forEach(function (el) {
+          el.classList.toggle("active", el.id === view + "View");
+        });
+        document.querySelectorAll(".nav-btn").forEach(function (btn) {
+          btn.classList.toggle("active", btn.dataset.view === view);
+        });
+        var active = document.getElementById(view + "View");
+        els.subtitle.textContent = active ? active.dataset.title : "记录每一次蓝色相遇";
+        if (view === "share") renderShare();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function renderAll() {
+        renderCountdown();
+        renderTicketAlert();
+        renderStats();
+        renderMap();
+        renderLists();
+        renderShare();
+      }
+
+      function startCountdown() {
+        clearInterval(state.countdownTimer);
+        state.countdownTimer = setInterval(renderCountdown, 1000);
+      }
+
+      function renderCountdown() {
+        var nextDate = state.settings.nextDate ? new Date(state.settings.nextDate) : null;
+        if (!nextDate || isNaN(nextDate.getTime())) {
+          els.countdownCard.innerHTML = "<div class=\"empty-next\" role=\"button\" tabindex=\"0\"><strong>暂无下一场信息</strong><span class=\"muted\">点击这里设置下一场演唱会</span></div>";
+          els.countdownCard.onclick = openSettings;
+          return;
+        }
+        els.countdownCard.onclick = null;
+        var diff = nextDate.getTime() - Date.now();
+        var past = diff <= 0;
+        diff = Math.max(0, diff);
+        var seconds = Math.floor(diff / 1000);
+        var days = Math.floor(seconds / 86400);
+        var hours = Math.floor((seconds % 86400) / 3600);
+        var minutes = Math.floor((seconds % 3600) / 60);
+        var secs = seconds % 60;
+        var city = state.settings.nextCity || "下一场";
+        els.countdownCard.innerHTML =
+          "<div class=\"next-city\">🎤 距离 " + escapeHtml(city) + " 五月天演唱会</div>" +
+          "<div class=\"count-grid\">" +
+          timeBox(days, "天") + timeBox(hours, "时") + timeBox(minutes, "分") + timeBox(secs, "秒") +
+          "</div>" +
+          "<div class=\"muted\">" + (past ? "这一场已到达，记得去打卡记录。" : formatDateTime(nextDate)) + "</div>";
+      }
+
+      function timeBox(value, unit) {
+        return "<div class=\"timebox\"><strong>" + String(value).padStart(unit === "天" ? 1 : 2, "0") + "</strong><span>" + unit + "</span></div>";
+      }
+
+      function renderTicketAlert() {
+        var ticketDate = state.settings.ticketDate ? new Date(state.settings.ticketDate) : null;
+        if (!ticketDate || isNaN(ticketDate.getTime())) {
+          els.ticketAlert.innerHTML = "";
+          return;
+        }
+        var diff = ticketDate.getTime() - Date.now();
+        var label = diff >= 0 ? "还有 " + Math.ceil(diff / 86400000) + " 天抢票" : "抢票日已过";
+        els.ticketAlert.innerHTML = "<div class=\"ticket-alert\"><span>⏰ 抢票提醒 <strong>" + label + "</strong></span><span>" + escapeHtml(formatDateTime(ticketDate)) + "</span></div>";
+      }
+
+      function renderStats() {
+        var cities = uniqueCities();
+        els.statShows.textContent = state.records.length;
+        els.statCities.textContent = cities.length;
+        els.statSongs.textContent = state.records.filter(function (r) { return r.songs && r.songs.trim(); }).length;
+      }
+
+      function renderMap() {
+        var cities = uniqueCities();
+        els.mapSummary.textContent = cities.length + "城" + state.records.length + "场";
+        els.cityMarkers.innerHTML = cities.map(function (city) {
+          var point = CITY_POINTS[city];
+          if (!point) return "";
+          var labelX = point[0] + 8;
+          var labelY = point[1] - 8;
+          return "<g><circle class=\"city-dot\" cx=\"" + point[0] + "\" cy=\"" + point[1] + "\" r=\"6\"></circle><text class=\"city-label\" x=\"" + labelX + "\" y=\"" + labelY + "\">" + escapeHtml(city) + "</text></g>";
+        }).join("");
+      }
+
+      function renderLists() {
+        var sorted = state.records.slice().sort(sortRecords);
+        els.concertList.innerHTML = sorted.map(recordCard).join("");
+        els.editList.innerHTML = sorted.map(editCard).join("");
+        els.recordCount.textContent = state.records.length + "条";
+        document.querySelectorAll("[data-edit-id]").forEach(function (btn) {
+          btn.addEventListener("click", function () { editRecord(btn.dataset.editId); });
+        });
+        document.querySelectorAll("[data-delete-id]").forEach(function (btn) {
+          btn.addEventListener("click", function () { deleteRecord(btn.dataset.deleteId); });
+        });
+      }
+
+      function recordCard(record) {
+        return "<article class=\"concert-item\">" +
+          "<h3>📍 " + escapeHtml(record.city) + "</h3>" +
+          "<span class=\"pill\">" + (record.date ? escapeHtml(record.date) : "日期待补") + "</span>" +
+          "<div class=\"concert-meta\">" +
+          "场馆：" + escapeHtml(record.venue || "待补充") + "<br>" +
+          "座位：" + escapeHtml(record.seat || "待补充") + "<br>" +
+          "歌单：" + escapeHtml(record.songs ? compactText(record.songs, 42) : "待记录") +
+          "</div></article>";
+      }
+
+      function editCard(record) {
+        return "<article class=\"concert-item\">" +
+          "<h3>🎫 " + escapeHtml(record.city) + "</h3>" +
+          "<span class=\"pill\">" + escapeHtml(record.venue || "未填场馆") + "</span>" +
+          "<div class=\"concert-meta\">" + escapeHtml(record.date || "未填日期") + " · " + escapeHtml(record.seat || "未填座位") + "</div>" +
+          "<div class=\"actions\" style=\"grid-column:1/-1\">" +
+          "<button class=\"btn secondary\" type=\"button\" data-edit-id=\"" + record.id + "\">✏️ 编辑</button>" +
+          "<button class=\"btn danger\" type=\"button\" data-delete-id=\"" + record.id + "\">🗑️ 删除</button>" +
+          "</div></article>";
+      }
+
+      function submitRecord(event) {
+        event.preventDefault();
+        var id = els.recordId.value || makeId();
+        var record = {
+          id: id,
+          city: els.cityInput.value,
+          venue: els.venueInput.value.trim(),
+          date: els.dateInput.value,
+          seat: els.seatInput.value.trim(),
+          songs: els.songsInput.value.trim(),
+          createdAt: Date.now()
+        };
+        var index = state.records.findIndex(function (item) { return item.id === id; });
+        if (index >= 0) {
+          record.createdAt = state.records[index].createdAt || Date.now();
+          state.records.splice(index, 1, record);
+        } else {
+          state.records.push(record);
+        }
+        saveRecords();
+        resetForm();
+        renderAll();
+        toast("打卡记录已保存");
+      }
+
+      function editRecord(id) {
+        var record = state.records.find(function (item) { return item.id === id; });
+        if (!record) return;
+        els.recordId.value = record.id;
+        els.cityInput.value = record.city;
+        els.venueInput.value = record.venue || "";
+        els.dateInput.value = record.date || "";
+        els.seatInput.value = record.seat || "";
+        els.songsInput.value = record.songs || "";
+        els.formTitle.textContent = "编辑打卡";
+        switchView("checkin");
+        toast("已载入记录");
+      }
+
+      function deleteRecord(id) {
+        if (!confirm("确定删除这条打卡记录吗？")) return;
+        state.records = state.records.filter(function (item) { return item.id !== id; });
+        saveRecords();
+        renderAll();
+        toast("已删除记录");
+      }
+
+      function resetForm() {
+        els.recordId.value = "";
+        els.checkinForm.reset();
+        els.cityInput.value = CITIES[0];
+        els.formTitle.textContent = "新增打卡";
+      }
+
+      function openSettings() {
+        els.nextCityInput.value = state.settings.nextCity || CITIES[0];
+        els.nextDateInput.value = state.settings.nextDate || "";
+        els.ticketDateInput.value = state.settings.ticketDate || "";
+        els.settingsModal.classList.add("active");
+        els.settingsModal.setAttribute("aria-hidden", "false");
+      }
+
+      function closeSettings() {
+        els.settingsModal.classList.remove("active");
+        els.settingsModal.setAttribute("aria-hidden", "true");
+      }
+
+      function submitSettings(event) {
+        event.preventDefault();
+        state.settings = {
+          nextCity: els.nextCityInput.value,
+          nextDate: els.nextDateInput.value,
+          ticketDate: els.ticketDateInput.value
+        };
+        saveSettings();
+        closeSettings();
+        renderAll();
+        toast("设置已保存");
+      }
+
+      function renderShare() {
+        var canvas = els.shareCanvas;
+        var ctx = canvas.getContext("2d");
+        var width = canvas.width;
+        var height = canvas.height;
+        var cities = uniqueCities();
+        var lyric = LYRICS[state.lyricIndex];
+        var gradient = ctx.createLinearGradient(0, 0, width, height);
+        gradient.addColorStop(0, "#1a5fdc");
+        gradient.addColorStop(.45, "#102942");
+        gradient.addColorStop(1, "#0f1923");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.fillStyle = "rgba(255,255,255,.08)";
+        for (var i = 0; i < 32; i++) {
+          ctx.beginPath();
+          ctx.arc((i * 137) % width, (i * 211) % height, 2 + (i % 5), 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        roundRect(ctx, 60, 70, width - 120, height - 140, 34, "rgba(10,20,32,.72)", "rgba(255,255,255,.16)");
+        ctx.textAlign = "center";
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "700 58px Microsoft YaHei, PingFang SC, sans-serif";
+        ctx.fillText("五月天演唱会小本本", width / 2, 170);
+        ctx.fillStyle = "#ffb49a";
+        ctx.font = "400 28px Microsoft YaHei, PingFang SC, sans-serif";
+        ctx.fillText("Mayday Live Memory", width / 2, 218);
+
+        ctx.fillStyle = "#ff6b35";
+        ctx.font = "700 82px Microsoft YaHei, PingFang SC, sans-serif";
+        ctx.fillText(cities.length + "城" + state.records.length + "场", width / 2, 345);
+        ctx.fillStyle = "#dce9ff";
+        ctx.font = "400 32px Microsoft YaHei, PingFang SC, sans-serif";
+        ctx.fillText("五迷认证", width / 2, 395);
+
+        drawCityChips(ctx, cities, 110, 480, width - 220);
+
+        ctx.fillStyle = "rgba(255,255,255,.9)";
+        ctx.font = "700 34px Microsoft YaHei, PingFang SC, sans-serif";
+        ctx.fillText("已去过城市", width / 2, 455);
+
+        ctx.fillStyle = "rgba(255,255,255,.82)";
+        ctx.font = "400 30px Microsoft YaHei, PingFang SC, sans-serif";
+        wrapCanvasText(ctx, lyric, width / 2, 1000, width - 180, 44, "center");
+        ctx.fillStyle = "#7fb0ff";
+        ctx.font = "400 24px Microsoft YaHei, PingFang SC, sans-serif";
+        ctx.fillText("把蓝色的夜晚，装进口袋", width / 2, 1100);
+
+        els.shareFallback.value = "五月天演唱会小本本｜" + cities.length + "城" + state.records.length + "场五迷认证\\n已去过：" + (cities.join("、") || "还在路上") + "\\n" + lyric;
+      }
+
+      function drawCityChips(ctx, cities, startX, startY, maxWidth) {
+        var x = startX;
+        var y = startY;
+        var rowHeight = 64;
+        var list = cities.length ? cities : ["还在路上"];
+        ctx.font = "700 30px Microsoft YaHei, PingFang SC, sans-serif";
+        list.forEach(function (city) {
+          var chipWidth = Math.min(maxWidth, ctx.measureText(city).width + 52);
+          if (x + chipWidth > startX + maxWidth) {
+            x = startX;
+            y += rowHeight;
+          }
+          roundRect(ctx, x, y, chipWidth, 46, 23, "rgba(26,95,220,.55)", "rgba(255,255,255,.22)");
+          ctx.fillStyle = "#ffffff";
+          ctx.textAlign = "center";
+          ctx.fillText(city, x + chipWidth / 2, y + 33);
+          x += chipWidth + 14;
+        });
+      }
+
+      function saveShareImage() {
+        renderShare();
+        var canvas = els.shareCanvas;
+        if (canvas.toBlob) {
+          canvas.toBlob(function (blob) {
+            var file = new File([blob], "mayday-card.png", { type: "image/png" });
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+              navigator.share({ files: [file], title: "五月天演唱会小本本" }).catch(function () {});
+              return;
+            }
+            downloadBlob(blob);
+          }, "image/png");
+        } else {
+          var link = document.createElement("a");
+          link.download = "mayday-card.png";
+          link.href = canvas.toDataURL("image/png");
+          link.click();
+        }
+        toast("图片已生成");
+      }
+
+      function downloadBlob(blob) {
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement("a");
+        link.download = "mayday-card.png";
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+      }
+
+      function uniqueCities() {
+        var seen = {};
+        return state.records.map(function (r) { return r.city; }).filter(function (city) {
+          if (!city || seen[city]) return false;
+          seen[city] = true;
+          return true;
+        });
+      }
+
+      function sortRecords(a, b) {
+        if (a.date && b.date) return a.date.localeCompare(b.date);
+        if (a.date) return -1;
+        if (b.date) return 1;
+        return (a.createdAt || 0) - (b.createdAt || 0);
+      }
+
+      function compactText(text, max) {
+        text = String(text).replace(/\s+/g, " ").trim();
+        return text.length > max ? text.slice(0, max - 1) + "…" : text;
+      }
+
+      function formatDateTime(date) {
+        var y = date.getFullYear();
+        var m = String(date.getMonth() + 1).padStart(2, "0");
+        var d = String(date.getDate()).padStart(2, "0");
+        var h = String(date.getHours()).padStart(2, "0");
+        var min = String(date.getMinutes()).padStart(2, "0");
+        return y + "-" + m + "-" + d + " " + h + ":" + min;
+      }
+
+      function roundRect(ctx, x, y, w, h, r, fill, stroke) {
+        ctx.beginPath();
+        ctx.moveTo(x + r, y);
+        ctx.arcTo(x + w, y, x + w, y + h, r);
+        ctx.arcTo(x + w, y + h, x, y + h, r);
+        ctx.arcTo(x, y + h, x, y, r);
+        ctx.arcTo(x, y, x + w, y, r);
+        ctx.closePath();
+        if (fill) {
+          ctx.fillStyle = fill;
+          ctx.fill();
+        }
+        if (stroke) {
+          ctx.strokeStyle = stroke;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+        }
+      }
+
+      function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight, align) {
+        ctx.textAlign = align || "left";
+        var line = "";
+        var lines = [];
+        for (var i = 0; i < text.length; i++) {
+          var testLine = line + text[i];
+          if (ctx.measureText(testLine).width > maxWidth && line) {
+            lines.push(line);
+            line = text[i];
+          } else {
+            line = testLine;
+          }
+        }
+        lines.push(line);
+        lines.forEach(function (item, index) {
+          ctx.fillText(item, x, y + index * lineHeight);
+        });
+      }
+
+      function escapeHtml(value) {
+        return String(value == null ? "" : value).replace(/[&<>"']/g, function (char) {
+          return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" })[char];
+        });
+      }
+
+      function makeId() {
+        return "r_" + Date.now().toString(36) + "_" + Math.random().toString(36).slice(2, 8);
+      }
+
+      function toast(message) {
+        els.toast.textContent = message;
+        els.toast.classList.add("show");
+        clearTimeout(toast.timer);
+        toast.timer = setTimeout(function () { els.toast.classList.remove("show"); }, 1800);
+      }
+    })();
+  </script>
+</body>
+</html>
